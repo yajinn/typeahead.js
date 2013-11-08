@@ -307,7 +307,8 @@
                 cache: o.cache,
                 timeout: o.timeout,
                 dataType: o.dataType || "json",
-                beforeSend: o.beforeSend
+                beforeSend: o.beforeSend,
+                complete: o.complete
             };
             this._get = (/^throttle$/i.test(o.rateLimitFn) ? utils.throttle : utils.debounce)(this._get, o.rateLimitWait || 300);
         }
@@ -331,6 +332,7 @@
                     incrementPendingRequests();
                     jqXhr = pendingRequests[url] = $.ajax(url, this.ajaxSettings).always(always);
                 }
+                jqXhr.suppressAppMessages = true;
                 return jqXhr;
                 function always() {
                     decrementPendingRequests();
@@ -535,7 +537,7 @@
                     utils.each(data, function(i, datum) {
                         var item = that._transformDatum(datum), isDuplicate;
                         isDuplicate = utils.some(suggestions, function(suggestion) {
-                            return item.value === suggestion.value;
+                            false;
                         });
                         !isDuplicate && suggestions.push(item);
                         return suggestions.length < that.limit;
@@ -697,7 +699,7 @@
                 cursor: "pointer"
             },
             suggestionChild: {
-                whiteSpace: "normal"
+                whiteSpace: "nowrap"
             }
         };
         function DropdownView(o) {
@@ -914,7 +916,7 @@
             this.inputView = new InputView({
                 input: $input,
                 hint: $hint
-            }).on("focused", this._openDropdown).on("blured", this._closeDropdown).on("blured", this._setInputValueToQuery).on("enterKeyed tabKeyed", this._handleSelection).on("queryChanged", this._clearHint).on("queryChanged", this._clearSuggestions).on("queryChanged", this._getSuggestions).on("whitespaceChanged", this._updateHint).on("queryChanged whitespaceChanged", this._openDropdown).on("queryChanged whitespaceChanged", this._setLanguageDirection).on("escKeyed", this._closeDropdown).on("escKeyed", this._setInputValueToQuery).on("tabKeyed upKeyed downKeyed", this._managePreventDefault).on("upKeyed downKeyed", this._moveDropdownCursor).on("upKeyed downKeyed", this._openDropdown).on("tabKeyed leftKeyed rightKeyed", this._autocomplete);
+            }).on("focused", this._openDropdown).on("blured", this._closeDropdown).on("enterKeyed tabKeyed", this._handleSelection).on("queryChanged", this._clearHint).on("queryChanged", this._clearSuggestions).on("queryChanged", this._getSuggestions).on("whitespaceChanged", this._updateHint).on("queryChanged whitespaceChanged", this._openDropdown).on("queryChanged whitespaceChanged", this._setLanguageDirection).on("escKeyed", this._closeDropdown).on("escKeyed", this._setInputValueToQuery).on("tabKeyed upKeyed downKeyed", this._managePreventDefault).on("upKeyed downKeyed", this._moveDropdownCursor).on("upKeyed downKeyed", this._openDropdown).on("tabKeyed leftKeyed rightKeyed", this._autocomplete);
         }
         utils.mixin(TypeaheadView.prototype, EventTarget, {
             _managePreventDefault: function(e) {

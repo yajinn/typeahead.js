@@ -31,7 +31,8 @@ var Transport = (function() {
       cache: o.cache,
       timeout: o.timeout,
       dataType: o.dataType || 'json',
-      beforeSend: o.beforeSend
+      beforeSend: o.beforeSend,
+      complete: o.complete
     };
 
     this._get = (/^throttle$/i.test(o.rateLimitFn) ?
@@ -77,7 +78,8 @@ var Transport = (function() {
         jqXhr = pendingRequests[url] =
           $.ajax(url, this.ajaxSettings).always(always);
       }
-
+      // for gravity so that 500 errors don't show up
+      jqXhr.suppressAppMessages = true
       return jqXhr;
 
       function always() {

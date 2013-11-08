@@ -86,7 +86,8 @@ var TypeaheadView = (function() {
     this.inputView = new InputView({ input: $input, hint: $hint })
     .on('focused', this._openDropdown)
     .on('blured', this._closeDropdown)
-    .on('blured', this._setInputValueToQuery)
+    // causes the query to get re-set into the input on navigation events in Gravity
+    //.on('blured', this._setInputValueToQuery) 
     .on('enterKeyed tabKeyed', this._handleSelection)
     .on('queryChanged', this._clearHint)
     .on('queryChanged', this._clearSuggestions)

@@ -278,7 +278,9 @@ var Dataset = (function() {
 
           // checks for duplicates
           isDuplicate = utils.some(suggestions, function(suggestion) {
-            return item.value === suggestion.value;
+            // always return false
+            // return item.value === suggestion.value;
+            false
           });
 
           !isDuplicate && suggestions.push(item);
